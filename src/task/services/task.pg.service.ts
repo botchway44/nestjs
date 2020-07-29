@@ -19,23 +19,32 @@ export class PostgresTaskService {
   /**
    * Returns an array of tasks based on a filter
    * @param queryParams
+   * @todo Fix QueryBuilder to get required results
    */
-  async searchByFilter(queryParams: SearchFilterDTO): Promise<Task[]> {
+  async getTasks(queryParams: SearchFilterDTO): Promise<Task[]> {
     const { query, status } = queryParams;
 
-    console.log('Searching with ');
+    console.log(`Searching with  ${query} and ${status}`);
     //Work more on query and filtering with task repository
-    // const tasks = await this.getAllTask();
-    const resultHolder = this.taskRepository.find({
-      title: Like(`%${query}%`),
-      status: status,
-    });
+    const queryBuilder = this.taskRepository.createQueryBuilder('task');
 
+    if (status) {
+      queryBuilder.andWhere('task.status = :status', { status });
+    }
+    if (query) {
+      queryBuilder.andWhere(
+        'task.title LIKE :query OR task.description LIKE :query',
+        { query: `%${query}%` },
+      );
+    }
+    const res = await queryBuilder.getMany();
+
+    return res;
     // if (status) {
     //   resultHolder = tasks.filter((task) => task.status == status);
     // }
 
-    return resultHolder;
+    // return resultHolder;
     // if (query) throw new Error('Method not implemented.');
   }
 
@@ -70,22 +79,32 @@ export class PostgresTaskService {
   async deleteTaskByID(id: number): Promise<Task> {
     const temp = this.getTaskByID(id);
     // this.taskRepository.remove();
-    if (temp) await this.taskRepository.delete({ id: id });
-    // const tempList = this.task.filter((task) => task.id != id);
-    // this.tasks = tempList;
+    if (temp) {
+      const res = await this.taskRepository.delete({ id: id });
+      if (res.affected == 0)
+        throw new NotFoundException(`Task with id ${id} not found`);
+    }
+
     return temp;
   }
 
-  // /**
-  //  * Updates a task status based on the Id
-  //  * @param id
-  //  * @param status
-  //  */
-  // updateTaskStatus(id: string, status: TaskStatus): Task {
-  //   const temp: Task = this.getTaskByID(id);
-  //   temp.status = status;
-  //   return temp;
-  // }
+  /**
+   * Updates a task status based on the Id
+   * @param id
+   * @param status
+   */
+  async updateTaskStatus(id: number, status: TaskStatus): Promise<Task> {
+    const temp = this.getTaskByID(id);
+
+    if (temp) {
+      (await temp).status = status;
+      this.taskRepository.update({ id: id }, { id, status });
+    } else {
+      throw new NotFoundException(`Task with id ${id} not found`);
+    }
+
+    return temp;
+  }
 
   // /**
   //  * Returns all task

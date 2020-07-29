@@ -2,8 +2,6 @@ import {
   Controller,
   Get,
   Post,
-  Request,
-  Req,
   Body,
   Param,
   Delete,
@@ -18,6 +16,7 @@ import { CreateTaskDTO } from '../dto/create-task-dto';
 import { SearchFilterDTO } from '../dto/get-task-filter-dto';
 import { TaskStatusValidationPipe } from '../pipes/task-status-validation.pipe';
 import { Task } from '../entities/task.entity';
+import { TaskStatus } from '../model/taskstatus';
 
 @Controller('task')
 export class TaskController {
@@ -28,9 +27,7 @@ export class TaskController {
   findAllTask(
     @Query(ValidationPipe) queryParams: SearchFilterDTO,
   ): Promise<Task[]> {
-    if (Object.keys(queryParams).length)
-      return this.taskService.searchByFilter(queryParams);
-    else return this.taskService.getAllTask();
+    return this.taskService.getTasks(queryParams);
   }
 
   // // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -57,14 +54,14 @@ export class TaskController {
     return this.taskService.addTask(createTaskDto);
   }
 
-  // // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  // @Patch('/:id/status')
-  // // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  // updateTask(
-  //   @Param('id') id: string,
-  //   @Body('status', TaskStatusValidationPipe) status: TaskStatus,
-  // ): Task {
-  //   console.log(status);
-  //   return this.taskService.updateTaskStatus(id, status);
-  // }
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  @Patch('/:id/status')
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  updateTask(
+    @Param('id', ParseIntPipe) id: number,
+    @Body('status', TaskStatusValidationPipe) status: TaskStatus,
+  ): Promise<Task> {
+    console.log(status);
+    return this.taskService.updateTaskStatus(id, status);
+  }
 }
