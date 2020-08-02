@@ -91,11 +91,12 @@ export class PostgresTaskService {
    * @param status
    */
   async updateTaskStatus(id: number, status: TaskStatus): Promise<Task> {
-    const temp = this.getTaskByID(id);
+    const temp = await this.getTaskByID(id);
 
     if (temp) {
-      (await temp).status = status;
-      this.taskRepository.update({ id: id }, { id, status });
+      temp.status = status;
+      temp.save();
+      // this.taskRepository.update({ id: id }, { id, status });
     } else {
       throw new NotFoundException(`Task with id ${id} not found`);
     }
