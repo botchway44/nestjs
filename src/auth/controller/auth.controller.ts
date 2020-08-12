@@ -13,6 +13,8 @@ import { AuthCredentialsDTO } from '../dto/auth.credentials.dto';
 import { JWTPayload } from '../interfaces/jwt.interface';
 import { AccessToken } from '../interfaces/accesstoken.interface';
 import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from '../decorators/get-user-decorator';
+import { User } from '../entities/user.entity';
 
 @Controller('auth')
 export class AuthController {
@@ -33,8 +35,8 @@ export class AuthController {
 
   @Post('/test')
   @UseGuards(AuthGuard())
-  test(@Req() res: Request): Promise<void> {
-    console.log(res);
+  test(@GetUser() user: User): Promise<void> {
+    console.log(user);
 
     return null;
   }
