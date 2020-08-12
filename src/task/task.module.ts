@@ -4,9 +4,10 @@ import { PostgresTaskService } from './services/task.pg.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TaskRespository } from './repository/TaskRespository';
 import { Task } from './entities/task.entity';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([TaskRespository])],
+  imports: [TypeOrmModule.forFeature([TaskRespository]), AuthModule],
   controllers: [TaskController],
   providers: [PostgresTaskService],
 })

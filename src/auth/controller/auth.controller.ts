@@ -1,7 +1,6 @@
 import {
   Controller,
   Get,
-  Request,
   Body,
   Post,
   ValidationPipe,
@@ -33,11 +32,11 @@ export class AuthController {
     return this.authService.signIn(authCredentialsDTO);
   }
 
-  @Post('/test')
-  @UseGuards(AuthGuard())
-  test(@GetUser() user: User): Promise<void> {
-    console.log(user);
+  // @Post('/test')
+  // @UseGuards(AuthGuard())
+  // test(@GetUser() user: User): Promise<void> {
+  //   console.log(user);
 
-    return null;
-  }
+  //   return null;
+  // }
 }

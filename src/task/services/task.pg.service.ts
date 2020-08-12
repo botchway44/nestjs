@@ -5,6 +5,7 @@ import { TaskRespository } from '../repository/TaskRespository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Task } from '../entities/task.entity';
 import { TaskStatus } from '../model/taskstatus';
+import { User } from 'src/auth/entities/user.entity';
 @Injectable()
 export class PostgresTaskService {
   /**Contains all tasks */
@@ -18,10 +19,10 @@ export class PostgresTaskService {
    * @param queryParams
    * @todo Fix QueryBuilder to get required results
    */
-  async getTasks(queryParams: SearchFilterDTO): Promise<Task[]> {
+  async getTasks(user: User, queryParams: SearchFilterDTO): Promise<Task[]> {
     const { query, status } = queryParams;
 
-    console.log(`Searching with  ${query} and ${status}`);
+    // console.log(`Searching with  ${query} and ${status}`);
     //Work more on query and filtering with task repository
     const queryBuilder = this.taskRepository.createQueryBuilder('task');
 
@@ -34,6 +35,10 @@ export class PostgresTaskService {
         { query: `%${query}%` },
       );
     }
+
+    const id = user.id;
+    console.log(id);
+    queryBuilder.andWhere('task.userId = :id', { id });
     const res = await queryBuilder.getMany();
 
     return res;
@@ -49,8 +54,8 @@ export class PostgresTaskService {
    * Adds a task to the task List
    * @param createTaskDto
    */
-  async addTask(createTaskDto: CreateTaskDTO): Promise<Task> {
-    return this.taskRepository.createTask(createTaskDto);
+  async addTask(user: User, createTaskDto: CreateTaskDTO): Promise<Task> {
+    return this.taskRepository.createTask(user, createTaskDto);
   }
 
   /**

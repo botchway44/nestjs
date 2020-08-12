@@ -10,6 +10,7 @@ import {
   UsePipes,
   ValidationPipe,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { PostgresTaskService } from '../services/task.pg.service';
 import { CreateTaskDTO } from '../dto/create-task-dto';
@@ -17,7 +18,11 @@ import { SearchFilterDTO } from '../dto/get-task-filter-dto';
 import { TaskStatusValidationPipe } from '../pipes/task-status-validation.pipe';
 import { Task } from '../entities/task.entity';
 import { TaskStatus } from '../model/taskstatus';
+import { AuthGuard } from '@nestjs/passport';
+import { User } from 'src/auth/entities/user.entity';
+import { GetUser } from 'src/auth/decorators/get-user-decorator';
 
+@UseGuards(AuthGuard())
 @Controller('task')
 export class TaskController {
   constructor(private taskService: PostgresTaskService) {}
@@ -25,9 +30,11 @@ export class TaskController {
   // // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   @Get()
   findAllTask(
+    @GetUser() user: User,
     @Query(ValidationPipe) queryParams: SearchFilterDTO,
   ): Promise<Task[]> {
-    return this.taskService.getTasks(queryParams);
+    console.log(user);
+    return this.taskService.getTasks(user, queryParams);
   }
 
   // // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -49,9 +56,13 @@ export class TaskController {
   @Post()
   @UsePipes(ValidationPipe)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  addTask(@Body() createTaskDto: CreateTaskDTO): Promise<Task> {
+  addTask(
+    @GetUser() user: User,
+    @Body() createTaskDto: CreateTaskDTO,
+  ): Promise<Task> {
     console.log('add task');
-    return this.taskService.addTask(createTaskDto);
+    console.log(user);
+    return this.taskService.addTask(user, createTaskDto);
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
