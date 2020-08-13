@@ -14,16 +14,16 @@ export class UserRepository extends Repository<User> {
 
     //Gend salt
     const salt = await bcrypt.genSalt();
-    console.log(salt);
+    // console.log(salt);
     const user = new User();
     user.username = username;
     user.salt = salt;
     user.password = await this.hashPassword(password, salt);
-    console.log(user.password);
+    // console.log(user.password);
     try {
       await user.save();
     } catch (error) {
-      console.log(error.code);
+      // console.log(error.code);
       if (error.code == '23505') {
         throw new ConflictException('Username already exist');
       } else {
@@ -38,7 +38,7 @@ export class UserRepository extends Repository<User> {
     const { username, password } = authCredentialsDTO;
 
     const user = await this.findOne({ username });
-    console.log(username + ' ' + password);
+    // console.log(username + ' ' + password);
     if (user && user.validatePassword(password)) {
       return user.username;
     }
