@@ -27,52 +27,51 @@ import { GetUser } from 'src/auth/decorators/get-user-decorator';
 export class TaskController {
   constructor(private taskService: PostgresTaskService) {}
 
-  // // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   @Get()
   findAllTask(
     @GetUser() user: User,
     @Query(ValidationPipe) queryParams: SearchFilterDTO,
   ): Promise<Task[]> {
-    console.log(user);
+    // console.log(user);
     return this.taskService.getTasks(user, queryParams);
   }
 
-  // // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   @Get('/:id')
   async getTaskById(
+    @GetUser() user: User,
     @Param('id', ParseIntPipe, ParseIntPipe) id: number,
   ): Promise<Task> {
-    return this.taskService.getTaskByID(id);
+    return this.taskService.getTaskByID(user, id);
   }
 
-  // // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   @Delete('/:id')
-  deleteTaskById(@Param('id') id: number): Promise<Task> {
-    console.log(`Remove Task ${id} `);
+  deleteTaskById(
+    @GetUser() user: User,
+    @Param('id') id: number,
+  ): Promise<Task> {
+    // console.log(`Remove Task ${id} `);
 
-    return this.taskService.deleteTaskByID(id);
+    return this.taskService.deleteTaskByID(user, id);
   }
-  // // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+
   @Post()
   @UsePipes(ValidationPipe)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   addTask(
     @GetUser() user: User,
     @Body() createTaskDto: CreateTaskDTO,
   ): Promise<Task> {
-    console.log('add task');
-    console.log(user);
+    // console.log('add task');
+    // console.log(user);
     return this.taskService.addTask(user, createTaskDto);
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   @Patch('/:id/status')
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   updateTask(
+    @GetUser() user: User,
     @Param('id', ParseIntPipe) id: number,
     @Body('status', TaskStatusValidationPipe) status: TaskStatus,
   ): Promise<Task> {
-    console.log(status);
-    return this.taskService.updateTaskStatus(id, status);
+    // console.log(status);
+    return this.taskService.updateTaskStatus(user, id, status);
   }
 }

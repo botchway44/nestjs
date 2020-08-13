@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTaskDTO } from '../dto/create-task-dto';
 import { SearchFilterDTO } from '../dto/get-task-filter-dto';
-import { TaskRespository } from '../repository/TaskRespository';
+import { TaskRespository } from '../repository/taskRespository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Task } from '../entities/task.entity';
 import { TaskStatus } from '../model/taskstatus';
@@ -37,7 +37,7 @@ export class PostgresTaskService {
     }
 
     const id = user.id;
-    console.log(id);
+    // console.log(id);
     queryBuilder.andWhere('task.userId = :id', { id });
     const res = await queryBuilder.getMany();
 
@@ -62,8 +62,13 @@ export class PostgresTaskService {
    * Gets a task by Id
    * @param id
    */
-  async getTaskByID(id: number): Promise<Task> {
-    const found = await this.taskRepository.findOne(id);
+  async getTaskByID(user: User, id: number): Promise<Task> {
+    const found = await this.taskRepository.findOne({
+      where: {
+        id,
+        userId: user.id,
+      },
+    });
 
     //throw an exception that will be caught by the
     //Nest Hanldler
@@ -78,8 +83,8 @@ export class PostgresTaskService {
    * Deletes a task by ID
    * @param id
    */
-  async deleteTaskByID(id: number): Promise<Task> {
-    const temp = this.getTaskByID(id);
+  async deleteTaskByID(user: User, id: number): Promise<Task> {
+    const temp = this.getTaskByID(user, id);
     // this.taskRepository.remove();
     if (temp) {
       const res = await this.taskRepository.delete({ id: id });
@@ -95,8 +100,12 @@ export class PostgresTaskService {
    * @param id
    * @param status
    */
-  async updateTaskStatus(id: number, status: TaskStatus): Promise<Task> {
-    const temp = await this.getTaskByID(id);
+  async updateTaskStatus(
+    user: User,
+    id: number,
+    status: TaskStatus,
+  ): Promise<Task> {
+    const temp = await this.getTaskByID(user, id);
 
     if (temp) {
       temp.status = status;

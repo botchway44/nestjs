@@ -5,8 +5,6 @@ import { AuthCredentialsDTO } from '../dto/auth.credentials.dto';
 import {
   ConflictException,
   InternalServerErrorException,
-  NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
 
 @EntityRepository(User)
