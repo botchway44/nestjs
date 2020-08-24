@@ -4,7 +4,8 @@ import { SearchFilterDTO } from '../dto/get-task-filter-dto';
 import { TaskModel } from '../model/task.model';
 import { CreateTaskDTO } from '../dto/create-task-dto';
 import { TaskStatus } from '../model/taskstatus';
-export class NativeTaskService {
+import { TaskServiceModel } from './task.model.service';
+export class NativeTaskService implements TaskServiceModel<TaskModel, string> {
   /**Contains all tasks */
   private tasks = [];
 
@@ -12,10 +13,10 @@ export class NativeTaskService {
    * Returns an array of tasks based on a filter
    * @param queryParams
    */
-  searchByFilter(queryParams: SearchFilterDTO): TaskModel[] {
+  async searchByFilter(queryParams: SearchFilterDTO): Promise<TaskModel[]> {
     const { query, status } = queryParams;
 
-    let tasks: TaskModel[] = this.getAllTask();
+    let tasks: TaskModel[] = await this.getAllTask();
     if (query) {
       tasks = tasks.filter((task) => task.title.includes(query));
     }
@@ -32,8 +33,8 @@ export class NativeTaskService {
    * Adds a task to the task List
    * @param createTaskDto
    */
-  addTask(createTaskDto: CreateTaskDTO): TaskModel {
-    const task: TaskModel = {
+  async addTask(createTaskDto: CreateTaskDTO): Promise<TaskModel> {
+    const task: TaskModel = await {
       id: uuidv4(),
       title: createTaskDto.title,
       description: createTaskDto.description,
@@ -48,8 +49,8 @@ export class NativeTaskService {
    * Gets a task by Id
    * @param id
    */
-  getTaskByID(id: string): TaskModel {
-    const list = this.tasks.find((task) => task.id == id);
+  async getTaskByID(id: string): Promise<TaskModel> {
+    const list = await this.tasks.find((task) => task.id == id);
 
     //throw an exception that will be caught by the
     //Nest Hanldler
@@ -64,7 +65,7 @@ export class NativeTaskService {
    * Deletes a task by ID
    * @param id
    */
-  deleteTaskByID(id: string): TaskModel {
+  deleteTaskByID(id: string): Promise<TaskModel> {
     const temp = this.getTaskByID(id);
     const tempList = this.tasks.filter((task) => task.id != id);
     this.tasks = tempList;
@@ -76,8 +77,8 @@ export class NativeTaskService {
    * @param id
    * @param status
    */
-  updateTaskStatus(id: string, status: TaskStatus): TaskModel {
-    const temp: TaskModel = this.getTaskByID(id);
+  async updateTaskStatus(id: string, status: TaskStatus): Promise<TaskModel> {
+    const temp: TaskModel = await this.getTaskByID(id);
     temp.status = status;
     return temp;
   }
@@ -85,7 +86,7 @@ export class NativeTaskService {
   /**
    * Returns all task
    */
-  getAllTask(): TaskModel[] {
+  async getAllTask(): Promise<TaskModel[]> {
     return this.tasks;
   }
 }

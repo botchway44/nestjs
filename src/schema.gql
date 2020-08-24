@@ -1,0 +1,32 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Task {
+  id: Int!
+  title: String!
+  description: String!
+  status: TaskStatus!
+}
+
+enum TaskStatus {
+  OPEN
+  PENDING
+  CLOSED
+}
+
+type Query {
+  allTask: [Task!]!
+  getTaskById(id: Int!): Task!
+}
+
+type Mutation {
+  deleteTaskById(id: Int!): Task!
+  addTask(createTaskDTO: CreateTaskDTO!): Task!
+  updateTask(id: Int!, status: TaskStatus!): Task!
+}
+
+input CreateTaskDTO {
+  title: String!
+  description: String!
+}

@@ -4,9 +4,19 @@ import { AppService } from './app.service';
 import { TaskModule } from '../task/task.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeORMOptions } from '../config/typeorm.config';
+import { GraphQLModule } from '@nestjs/graphql';
+import { join } from 'path';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(typeORMOptions), TaskModule],
+  imports: [
+    GraphQLModule.forRoot({
+      debug: true,
+      playground: true,
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+    }),
+    TypeOrmModule.forRoot(typeORMOptions),
+    TaskModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

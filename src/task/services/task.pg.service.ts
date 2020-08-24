@@ -8,13 +8,15 @@ import { Task } from '../entities/task.entity';
 import { TaskStatus } from '../model/taskstatus';
 import { title } from 'process';
 import { Like } from 'typeorm';
+import { TaskServiceModel } from './task.model.service';
 @Injectable()
-export class PostgresTaskService {
-  /**Contains all tasks */
-
+export class PostgresTaskService implements TaskServiceModel<Task, number> {
   constructor(
     @InjectRepository(TaskRespository) private taskRepository: TaskRespository,
   ) {}
+  searchByFilter(queryParams: SearchFilterDTO): Promise<Task[]> {
+    throw new Error('Method not implemented.');
+  }
 
   /**
    * Returns an array of tasks based on a filter
