@@ -22,7 +22,9 @@ import { TaskStatus } from '../model/taskstatus';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from 'src/auth/entities/user.entity';
 import { GetUser } from 'src/auth/decorators/get-user-decorator';
+import { ApiTags, ApiCreatedResponse, ApiBody } from '@nestjs/swagger';
 
+@ApiTags('task')
 @UseGuards(AuthGuard())
 @Controller('task')
 export class TaskController {
@@ -49,6 +51,10 @@ export class TaskController {
   }
 
   @Delete('/:id')
+  @ApiCreatedResponse({
+    description: 'The task has been successfully deleted.',
+    type: Task,
+  })
   deleteTaskById(
     @GetUser() user: User,
     @Param('id') id: number,
@@ -60,6 +66,10 @@ export class TaskController {
 
   @Post()
   @UsePipes(ValidationPipe)
+  @ApiCreatedResponse({
+    description: 'The task has been successfully created.',
+    type: Task,
+  })
   addTask(
     @GetUser() user: User,
     @Body() createTaskDto: CreateTaskDTO,
@@ -70,6 +80,14 @@ export class TaskController {
   }
 
   @Patch('/:id/status')
+  @ApiCreatedResponse({
+    description: 'The task has been successfully updated.',
+    type: Task,
+  })
+  @ApiBody({
+    description: 'The Field for the task to update',
+    type: Task,
+  })
   updateTask(
     @GetUser() user: User,
     @Param('id', ParseIntPipe) id: number,

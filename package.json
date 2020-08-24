@@ -25,6 +25,7 @@
     "@nestjs/jwt": "^7.1.0",
     "@nestjs/passport": "^7.1.0",
     "@nestjs/platform-express": "^7.1.1",
+    "@nestjs/swagger": "^4.6.0",
     "@nestjs/typeorm": "^7.1.0",
     "bcrypt": "^5.0.0",
     "class-transformer": "^0.2.3",
@@ -35,6 +36,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.5.5",
+    "swagger-ui-express": "^4.1.4",
     "typeorm": "^0.2.25",
     "uuid": "^8.2.0"
   },

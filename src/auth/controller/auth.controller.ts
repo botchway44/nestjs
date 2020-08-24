@@ -14,7 +14,10 @@ import { AccessToken } from '../interfaces/accesstoken.interface';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from '../decorators/get-user-decorator';
 import { User } from '../entities/user.entity';
+import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('user')
 @Controller('auth')
 export class AuthController {
   constructor(readonly authService: AuthService) {
