@@ -16,4 +16,7 @@ export const typeORMOptions: TypeOrmModuleOptions = {
   entities: [Task],
   synchronize: true,
   keepConnectionAlive: true,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 };
