@@ -8,7 +8,7 @@ import { PassportModule } from '@nestjs/passport';
 import { AuthConstants } from './constants/constants';
 import { JwtStrategy } from './strategies/passport.strategy';
 import { GqlAuthGuard } from './strategies/gql.auth.guard';
-import { AuthResolver } from './auth.resolver';
+import { AuthResolver } from './resolvers/auth.resolver';
 
 @Module({
   imports: [

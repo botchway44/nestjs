@@ -6,7 +6,9 @@ import {
   Matches,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { InputType, Field } from '@nestjs/graphql';
 
+@InputType()
 export class AuthCredentialsDTO {
   @ApiProperty({
     name: 'username',
@@ -17,6 +19,7 @@ export class AuthCredentialsDTO {
   @IsString()
   @MinLength(4)
   @MaxLength(20)
+  @Field((type) => String)
   username: string;
 
   @ApiProperty({
@@ -31,5 +34,6 @@ export class AuthCredentialsDTO {
   // @Matches(/((?=.*d)|(?=.*W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
   //   message: 'Enter a strong Password',
   // })
+  @Field((type) => String)
   password: string;
 }
