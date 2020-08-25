@@ -27,6 +27,12 @@ type Query {
 }
 
 type Mutation {
+  """Returns token after login"""
+  signin(authCredentialsDTO: AuthCredentialsDTO!): User!
+
+  """Creates a User Account"""
+  Signup(authCredentialsDTO: AuthCredentialsDTO!): User!
+
   """Deletes a specific task for a particular User by a given ID"""
   deleteTaskById(id: Int!): Task!
 
@@ -35,6 +41,11 @@ type Mutation {
 
   """Updates a  task for a Specific User's List of Tasks"""
   updateTask(id: Int!, status: TaskStatus!): Task!
+}
+
+input AuthCredentialsDTO {
+  username: String!
+  password: String!
 }
 
 input CreateTaskDTO {

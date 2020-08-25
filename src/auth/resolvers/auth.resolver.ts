@@ -19,14 +19,26 @@ export class AuthResolver {
     return user;
   }
 
-  @Mutation(() => User, {
-    name: 'deleteTaskById',
-    description: 'Deletes a specific task for a particular User by a given ID',
+  @Mutation((returns) => User, {
+    name: 'signin',
+    description: 'Returns token after login',
   })
-  signIn(
+  signin(
     @CurrentUser() user: User,
     @Args('authCredentialsDTO', { type: () => AuthCredentialsDTO }) authCredentialsDTO: AuthCredentialsDTO,
   ): Promise<AccessToken> {
     return this.authService.signIn(authCredentialsDTO);
+  }
+
+
+  @Mutation((returns) => User, {
+    name: 'Signup',
+    description: 'Creates a User Account',
+  })
+  signup(
+    @CurrentUser() user: User,
+    @Args('authCredentialsDTO', { type: () => AuthCredentialsDTO }) authCredentialsDTO: AuthCredentialsDTO,
+  ): Promise<void> {
+    return this.authService.signUp(authCredentialsDTO);
   }
 }
