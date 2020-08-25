@@ -7,11 +7,13 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { AuthConstants } from './constants/constants';
 import { JwtStrategy } from './strategies/passport.strategy';
+import { GqlAuthGuard } from './strategies/gql.auth.guard';
+import { AuthResolver } from './auth.resolver';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([UserRepository]),
-    PassportModule.register({ defaultStrategy: 'jwt' }),
+    PassportModule.register({ session: true, defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: AuthConstants.secret,
       signOptions: {
@@ -20,7 +22,7 @@ import { JwtStrategy } from './strategies/passport.strategy';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
-  exports: [JwtStrategy, PassportModule],
+  providers: [AuthService, JwtStrategy, GqlAuthGuard, AuthResolver],
+  exports: [JwtStrategy, PassportModule, GqlAuthGuard],
 })
 export class AuthModule {}

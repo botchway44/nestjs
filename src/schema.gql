@@ -2,6 +2,12 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type User {
+  id: Float!
+  username: String!
+  password: String!
+}
+
 type Task {
   id: Float!
   title: String!
@@ -10,5 +16,34 @@ type Task {
 }
 
 type Query {
+  whoAmI: User!
   tasks: [Task!]!
+
+  """Returns all the task for a particular User"""
+  getAllTask: [Task!]!
+
+  """Returns all the task for a particular User by a given ID"""
+  getTaskById(id: Int!): Task!
+}
+
+type Mutation {
+  """Deletes a specific task for a particular User by a given ID"""
+  deleteTaskById(id: Int!): Task!
+
+  """Adds task to a Specific User's List of Tasks"""
+  addTask(createTaskDTO: CreateTaskDTO!): Task!
+
+  """Updates a  task for a Specific User's List of Tasks"""
+  updateTask(id: Int!, status: TaskStatus!): Task!
+}
+
+input CreateTaskDTO {
+  title: String!
+  description: String!
+}
+
+enum TaskStatus {
+  OPEN
+  PENDING
+  CLOSED
 }

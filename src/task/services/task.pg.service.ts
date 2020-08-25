@@ -15,6 +15,22 @@ export class PostgresTaskService {
   ) {}
 
   /**
+   * Returns an array of tasks based on a user
+   * @param queryParams
+   */
+  async getAllTasks(user: User): Promise<Task[]> {
+    //Work more on query and filtering with task repository
+    const queryBuilder = this.taskRepository.createQueryBuilder('task');
+
+    const id = user.id;
+    // console.log(id);
+    queryBuilder.andWhere('task.userId = :id', { id });
+    const res = await queryBuilder.getMany();
+
+    return res;
+  }
+
+  /**
    * Returns an array of tasks based on a filter
    * @param queryParams
    * @todo Fix QueryBuilder to get required results

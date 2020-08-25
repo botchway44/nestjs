@@ -7,3 +7,14 @@ export const GetUser = createParamDecorator(
     return request.user as User;
   },
 );
+
+import { GqlExecutionContext } from '@nestjs/graphql';
+
+export const CurrentUser = createParamDecorator(
+  (data: unknown, context: ExecutionContext) => {
+    const ctx = GqlExecutionContext.create(context);
+    console.log('User me');
+    console.log(ctx.getContext().req.user);
+    return ctx.getContext().req.user;
+  },
+);

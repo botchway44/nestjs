@@ -11,9 +11,13 @@ import { join } from 'path';
 @Module({
   imports: [
     GraphQLModule.forRoot({
+      debug: true,
       playground: true,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       introspection: true,
+      installSubscriptionHandlers: true,
+      path: 'admin',
+      context: ({ req }) => ({ req }),
     }),
     TypeOrmModule.forRoot(typeORMOptions),
     TaskModule,
