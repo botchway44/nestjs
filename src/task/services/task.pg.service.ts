@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Task } from '../entities/task.entity';
 import { TaskStatus } from '../model/taskstatus';
 import { User } from 'src/auth/entities/user.entity';
-import { TaskRespository } from '../repository/taskRespository';
+import { TaskRespository } from '../repository/TaskRespository';
 @Injectable()
 export class PostgresTaskService {
   /**Contains all tasks */
