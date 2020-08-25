@@ -2,17 +2,17 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type User {
-  id: Float!
-  username: String!
-  password: String!
-}
-
 type Task {
   id: Float!
   title: String!
   description: String!
   status: String!
+}
+
+type User {
+  id: Float!
+  username: String!
+  password: String!
 }
 
 type Query {

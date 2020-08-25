@@ -1,18 +1,18 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTaskDTO } from '../dto/create-task-dto';
 import { SearchFilterDTO } from '../dto/get-task-filter-dto';
-import { TaskRespository } from '../repository/taskRespository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Task } from '../entities/task.entity';
 import { TaskStatus } from '../model/taskstatus';
 import { User } from 'src/auth/entities/user.entity';
+import { TaskRespository } from '../repository/taskRespository';
 @Injectable()
 export class PostgresTaskService {
   /**Contains all tasks */
 
   constructor(
     @InjectRepository(TaskRespository) private taskRepository: TaskRespository,
-  ) {}
+  ) { }
 
   /**
    * Returns an array of tasks based on a user
