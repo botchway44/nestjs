@@ -3,9 +3,16 @@
 # ------------------------------------------------------
 
 type Task {
-  id: Int!
+  """ID of a specific task """
+  id: ID!
+
+  """title of a task """
   title: String!
+
+  """description of a specific task """
   description: String!
+
+  """status of a specific task in any of the 3 states"""
   status: TaskStatus!
 }
 
@@ -16,13 +23,21 @@ enum TaskStatus {
 }
 
 type Query {
-  allTask: [Task!]!
+  """Returns all the task for a particular User"""
+  getAllTask: [Task!]!
+
+  """Returns all the task for a particular User by a given ID"""
   getTaskById(id: Int!): Task!
 }
 
 type Mutation {
+  """Deletes a specific task for a particular User by a given ID"""
   deleteTaskById(id: Int!): Task!
+
+  """Adds task to a Specific User's List of Tasks"""
   addTask(createTaskDTO: CreateTaskDTO!): Task!
+
+  """Updates a  task for a Specific User's List of Tasks"""
   updateTask(id: Int!, status: TaskStatus!): Task!
 }
 
