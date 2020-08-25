@@ -2,7 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { Logger } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require('dotenv').config();
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
@@ -15,7 +16,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document);
 
-  const port = 3000;
+  const port = process.env.PORT || 3000;
   await app.listen(port);
 
   // const app2 = await NestFactory.create(AppModule);
