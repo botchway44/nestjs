@@ -19,15 +19,16 @@ export class AuthResolver {
     return user;
   }
 
-  @Mutation((returns) => User, {
+  @Mutation((returns) => String, {
     name: 'signin',
     description: 'Returns token after login',
   })
-  signin(
+  async signin(
     @CurrentUser() user: User,
     @Args('authCredentialsDTO', { type: () => AuthCredentialsDTO }) authCredentialsDTO: AuthCredentialsDTO,
-  ): Promise<AccessToken> {
-    return this.authService.signIn(authCredentialsDTO);
+  ): Promise<string> {
+    const access = await this.authService.signIn(authCredentialsDTO);
+    return access.accessToken;
   }
 
 

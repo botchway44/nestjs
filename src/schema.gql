@@ -28,7 +28,7 @@ type Query {
 
 type Mutation {
   """Returns token after login"""
-  signin(authCredentialsDTO: AuthCredentialsDTO!): User!
+  signin(authCredentialsDTO: AuthCredentialsDTO!): String!
 
   """Creates a User Account"""
   Signup(authCredentialsDTO: AuthCredentialsDTO!): User!
